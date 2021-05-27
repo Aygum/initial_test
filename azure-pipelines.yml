@@ -8,6 +8,10 @@ variables:
     value: rg-for-tests
   - name: location
     value: westeurope
+  - name: clustername
+    value: myaks1
+  - name: nodecount
+    value: 2
 
 pool:
   vmImage: ubuntu-latest
@@ -20,4 +24,11 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-         az group create --name $(rgname) --location $(location)
+        az group create --name $(rgname) --location $(location)
+        az provider register --namespace Microsoft.OperationsManagement
+        az provider register --namespace Microsoft.OperationalInsights
+        az aks create --resource-group $(rgname) `
+          --name $(clustername) `
+          --node-count $(nodecount) `
+          --enable-addons monitoring `
+          --generate-ssh-keys
