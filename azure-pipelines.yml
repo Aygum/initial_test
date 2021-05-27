@@ -27,7 +27,9 @@ steps:
         az group create --name $(rgname) --location $(location)
         az provider register --namespace Microsoft.OperationsManagement
         az provider register --namespace Microsoft.OperationalInsights
-        az aks create --resource-group $(rgname) `
-          --name $(clustername) `
-          --node-count $(nodecount) `
-          --generate-ssh-keys
+        if(-not(az aks show --name $(clustername) --resource-group $(rgname))){
+          az aks create --resource-group $(rgname) `
+            --name $(clustername) `
+            --node-count $(nodecount) `
+            --generate-ssh-keys
+        }
