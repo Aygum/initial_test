@@ -1,0 +1,24 @@
+
+trigger:
+- master
+
+variables:
+  - group: MyVarGroup
+  - name: rgname
+    value: rg-for-tests
+  - name: region
+    value: westeurope
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: AzureCLI@2
+    displayName: initial deployment
+    inputs:
+      azureSubscription: $(azureSubscriptionConnection)
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: |
+         az --version
+         az account show
