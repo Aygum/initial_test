@@ -30,5 +30,4 @@ steps:
         az aks create --resource-group $(rgname) `
           --name $(clustername) `
           --node-count $(nodecount) `
-          --enable-addons monitoring `
           --generate-ssh-keys
