@@ -16,8 +16,8 @@ steps:
   - task: AzureCLI@2
     displayName: initial deployment
     inputs:
-      azureSubscription: $(azureSubscriptionConnection)
-      scriptType: ps
+      azureSubscription: 'MyVarGroup'
+      scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
          az --version
