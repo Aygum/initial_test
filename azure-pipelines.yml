@@ -16,7 +16,7 @@ steps:
   - task: AzureCLI@2
     displayName: initial deployment
     inputs:
-      azureSubscription: 'MyVarGroup'
+      azureSubscription: $(azureSubscriptionConnection)
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
