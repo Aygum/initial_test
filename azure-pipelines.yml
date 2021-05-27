@@ -6,7 +6,7 @@ variables:
   - group: MyVarGroup
   - name: rgname
     value: rg-for-tests
-  - name: region
+  - name: location
     value: westeurope
 
 pool:
@@ -20,5 +20,4 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-         az --version
-         az account show
+         az group create --name $(rgname) --location $(location)
