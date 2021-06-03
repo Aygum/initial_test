@@ -90,6 +90,10 @@ steps:
           --id http://$(spnname) `
           --query appId `
           --output tsv)
+        echo $(VNET_ID)
+        echo $(SUBNET_ID)
+        echo $(SP_PASSWD)
+        echo $(SP_ID)
         az aks create --name $(clustername) `
           --resource-group $(rgname) `
           --generate-ssh-keys `
