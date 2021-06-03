@@ -12,24 +12,53 @@ variables:
     value: myaks1
   - name: nodecount
     value: 2
+  - name: vnetname
+    value: myvnet1
+  - name: subnetname
+    value: mysubnet1
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
   - task: AzureCLI@2
-    displayName: initial deployment
+    displayName: initialisation
     inputs:
       azureSubscription: $(azureSubscriptionConnection)
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        az group create --name $(rgname) --location $(location)
+        az extension add --name aks-preview
+        az feature register --name VMSSPreview --namespace Microsoft.ContainerService
+        az provider register --namespace Microsoft.ContainerService
         az provider register --namespace Microsoft.OperationsManagement
         az provider register --namespace Microsoft.OperationalInsights
-        if(-not(az aks show --name $(clustername) --resource-group $(rgname))){
-          az aks create --resource-group $(rgname) `
-            --name $(clustername) `
-            --node-count $(nodecount) `
-            --generate-ssh-keys
-        }
+        mkdir $(clustername)
+        cd $(clustername)
+        ssh-keygen -f ssh-key-$(clustername)
+    condition: succeeded()
+
+  - task: AzureCLI@2
+    displayName: rg_creation
+    inputs:
+      azureSubscription: $(azureSubscriptionConnection)
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az group create --name $(rgname) --location $(location) --output table
+    condition: succeeded()
+
+  - task: AzureCLI@2
+    displayName: network_creation
+    inputs:
+      azureSubscription: $(azureSubscriptionConnection)
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az network vnet create `
+        --resource-group <RESOURCE-GROUP-NAME> `
+        --name $(vnetname) `
+        --address-prefixes 10.0.0.0/8 `
+        --subnet-name $(subnetname) `
+        --subnet-prefix 10.240.0.0/16
+    condition: succeeded()
