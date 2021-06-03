@@ -1,6 +1,6 @@
 
 trigger:
-- master
+- none
 
 variables:
   - group: MyVarGroup
@@ -16,6 +16,8 @@ variables:
     value: myvnet1
   - name: subnetname
     value: mysubnet1
+  - name: spnname
+    value: myaks1-sp
 
 pool:
   vmImage: ubuntu-latest
@@ -33,9 +35,6 @@ steps:
         az provider register --namespace Microsoft.ContainerService
         az provider register --namespace Microsoft.OperationsManagement
         az provider register --namespace Microsoft.OperationalInsights
-        mkdir $(clustername)
-        cd $(clustername)
-        ssh-keygen -f ssh-key-$(clustername)
     condition: false
 
   - task: AzureCLI@2
@@ -61,4 +60,56 @@ steps:
         --address-prefixes 10.0.0.0/8 `
         --subnet-name $(subnetname) `
         --subnet-prefix 10.240.0.0/16
+    condition: succeeded()
+
+  - task: AzureCLI@2
+    displayName: aks_creation
+    inputs:
+      azureSubscription: $(azureSubscriptionConnection)
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        mkdir $(clustername)
+        cd $(clustername)
+        ssh-keygen -f ssh-key-$(clustername)
+        VNET_ID=$(az network vnet show `
+          --resource-group $(rgname) `
+          --name $(vnetname) `
+          --query id `
+          --output tsv)
+        SUBNET_ID=$(az network vnet subnet show `
+          --resource-group $(rgname) `
+          --vnet-name $(vnetname) `
+          --name $(subnetname) `
+          --query id `
+          --output tsv)
+        SP_PASSWD=$(az ad sp create-for-rbac `
+          --name $(spnname) `
+          --role Contributor `
+          --scope $VNET_ID `
+          --query password `
+          --output tsv)
+        SP_ID=$(az ad sp show `
+          --id http://$(spnname) `
+          --query appId `
+          --output tsv)
+        az aks create --name $(clustername) `
+          --resource-group $(rgname) `
+          --ssh-key-value ssh-key-$(clustername).pub `
+          --node-count $(nodecount) `
+          --node-vm-size Standard_D2s_v3 `
+          --enable-vmss `
+          --enable-cluster-autoscaler `
+          --min-count 3 `
+          --max-count 6 `
+          --kubernetes-version 1.12.7 `
+          --service-principal $(SP_ID) `
+          --client-secret $(SP_PASSWD) `
+          --dns-service-ip 10.0.0.10 `
+          --docker-bridge-address 172.17.0.1/16 `
+          --network-plugin azure `
+          --network-policy azure `
+          --service-cidr 10.0.0.0/16 `
+          --vnet-subnet-id $(SUBNET_ID) `
+          --output table
     condition: succeeded()
