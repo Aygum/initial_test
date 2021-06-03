@@ -69,9 +69,6 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        mkdir $(clustername)
-        cd $(clustername)
-        ssh-keygen -f ssh-key-$(clustername)
         VNET_ID=$(az network vnet show `
           --resource-group $(rgname) `
           --name $(vnetname) `
@@ -95,7 +92,7 @@ steps:
           --output tsv)
         az aks create --name $(clustername) `
           --resource-group $(rgname) `
-          --ssh-key-value ssh-key-$(clustername).pub `
+          --generate-ssh-keys `
           --node-count $(nodecount) `
           --node-vm-size Standard_D2s_v3 `
           --enable-vmss `
