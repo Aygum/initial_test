@@ -56,7 +56,7 @@ steps:
       scriptLocation: inlineScript
       inlineScript: |
         az network vnet create `
-        --resource-group <RESOURCE-GROUP-NAME> `
+        --resource-group $(rgname) `
         --name $(vnetname) `
         --address-prefixes 10.0.0.0/8 `
         --subnet-name $(subnetname) `
