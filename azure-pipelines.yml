@@ -36,7 +36,7 @@ steps:
         mkdir $(clustername)
         cd $(clustername)
         ssh-keygen -f ssh-key-$(clustername)
-    condition: succeeded()
+    condition: false
 
   - task: AzureCLI@2
     displayName: rg_creation
