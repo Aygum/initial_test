@@ -91,9 +91,9 @@ steps:
           --query appId `
           --output tsv)
         echo $VNET_ID
-        echo $(SUBNET_ID)
+        echo $SUBNET_ID
         echo $SP_PASSWD
-        echo $(SP_ID)
+        echo $SP_ID
         az aks create --name $(clustername) `
           --resource-group $(rgname) `
           --generate-ssh-keys `
@@ -104,13 +104,13 @@ steps:
           --min-count 3 `
           --max-count 6 `
           --kubernetes-version 1.12.7 `
-          --service-principal $(SP_ID) `
-          --client-secret $(SP_PASSWD) `
+          --service-principal $SP_ID `
+          --client-secret $SP_PASSWD `
           --dns-service-ip 10.0.0.10 `
           --docker-bridge-address 172.17.0.1/16 `
           --network-plugin azure `
           --network-policy azure `
           --service-cidr 10.0.0.0/16 `
-          --vnet-subnet-id $(SUBNET_ID) `
+          --vnet-subnet-id $SUBNET_ID `
           --output table
     condition: succeeded()
