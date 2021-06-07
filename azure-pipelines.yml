@@ -69,30 +69,30 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        export VNET_ID = $(az network vnet show `
+        $VNET_ID = $(az network vnet show `
           --resource-group $(rgname) `
           --name $(vnetname) `
           --query id `
           --output tsv)
-        export SUBNET_ID=$(az network vnet subnet show `
+        $SUBNET_ID=$(az network vnet subnet show `
           --resource-group $(rgname) `
           --vnet-name $(vnetname) `
           --name $(subnetname) `
           --query id `
           --output tsv)
-        export SP_PASSWD=$(az ad sp create-for-rbac `
+        $SP_PASSWD=$(az ad sp create-for-rbac `
           --name $(spnname) `
           --role Contributor `
           --scope $VNET_ID `
           --query password `
           --output tsv)
-        export SP_ID=$(az ad sp show `
+        $SP_ID=$(az ad sp show `
           --id http://$(spnname) `
           --query appId `
           --output tsv)
-        echo $(VNET_ID)
+        echo $VNET_ID
         echo $(SUBNET_ID)
-        echo $(SP_PASSWD)
+        echo $SP_PASSWD
         echo $(SP_ID)
         az aks create --name $(clustername) `
           --resource-group $(rgname) `
