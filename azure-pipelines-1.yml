@@ -44,7 +44,7 @@ steps:
     action: 'Create Or Update Resource Group'
     resourceGroupName: $(rgname)
     location: $(location)
-    templateLocation: 'Linked Artifact'
+    templateLocation: 'Linked artifact'
     csmFile: '$(Build.ArtifactStagingDirectory)/network_template.json'
     csmParametersFile: '$(Build.ArtifactStagingDirectory)/network_param.json'
     deploymentMode: 'Incremental'
