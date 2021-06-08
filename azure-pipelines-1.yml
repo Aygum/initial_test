@@ -46,7 +46,7 @@ steps:
     location: $(location)
     templateLocation: 'Linked Artifact'
     csmFile: '$(Build.ArtifactStagingDirectory)/network_template.json'
-    csmParametersFile: '$(Build.ArtifactStagingDirectory)//network_param.json'
+    csmParametersFile: '$(Build.ArtifactStagingDirectory)/network_param.json'
     deploymentMode: 'Incremental'
     deploymentName: 'deploy1'
 
