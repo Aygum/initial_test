@@ -3,28 +3,28 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
       "resourceName": {
-          "value": "GEN-UNIQUE"
+          "value": "myaks1"
       },
       "dnsPrefix": {
-          "value": "GEN-UNIQUE"
+          "value": "myaksa67243e0"
       },
       "builtInRoleType":{
           "value": "Contributor"
       },
       "existingServicePrincipalObjectId": {
-          "value": "GEN-AZUREAD-AKS-OBJID"
+          "value": "36802e8a-7b49-4077-9d87-24b80d801702"
       },
       "existingServicePrincipalClientId": {
-          "value": "GEN-AZUREAD-AKS-APPID"
+          "value": "664b9952-8a9e-44bc-a5f4-3f772d0b7f79"
       },
       "existingVirtualNetworkName": {
-          "value": "GET-PREREQ-vnetName"
+          "value": "myvnet1"
       },
       "existingVirtualNetworkResourceGroup": {
-          "value": "GET-PREREQ-vnetResourceGroupName"
+          "value": "rg-for-tests"
       },
       "existingSubnetName": {
-          "value": "GET-PREREQ-subnetName"
+          "value": "mysubnet1"
       }
   }
 }
