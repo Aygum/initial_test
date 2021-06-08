@@ -81,14 +81,7 @@ steps:
           --query id `
           --output tsv)
         $SP_PASSWD='ZH_ejSQA-rC0SoTpYh8muQoZDMP4T-tjAy'
-        $SP_ID=$(az ad sp show `
-          --id http://$(spnname) `
-          --query appId `
-          --output tsv)
-        echo $VNET_ID
-        echo $SUBNET_ID
-        echo $SP_PASSWD
-        echo $SP_ID
+        $SP_ID='664b9952-8a9e-44bc-a5f4-3f772d0b7f79'
         az aks create --name $(clustername) `
           --resource-group $(rgname) `
           --generate-ssh-keys `
@@ -98,7 +91,7 @@ steps:
           --enable-cluster-autoscaler `
           --min-count 3 `
           --max-count 6 `
-          --kubernetes-version 1.12.7 `
+          --kubernetes-version 1.20.5`
           --service-principal $SP_ID `
           --client-secret $SP_PASSWD `
           --dns-service-ip 10.0.0.10 `
