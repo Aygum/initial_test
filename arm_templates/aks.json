@@ -168,6 +168,7 @@
   },
   "resources": [
           {
+          "condition": false,
           "type": "Microsoft.Resources/deployments",
           "name": "ClusterSubnetRoleAssignmentDeployment",
           "apiVersion": "2019-10-01",
@@ -198,7 +199,7 @@
           "apiVersion": "2020-07-01",
           "location": "[parameters('location')]",
           "dependsOn": [
-              "ClusterSubnetRoleAssignmentDeployment"
+              
           ],
           "identity": {
               "type": "SystemAssigned"
