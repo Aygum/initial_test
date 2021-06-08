@@ -29,6 +29,13 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'arm_templates'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
@@ -38,8 +45,8 @@ steps:
     resourceGroupName: $(rgname)
     location: $(location)
     templateLocation: 'Linked Artifact'
-    csmFile: 'arm_templates/network_template.json'
-    csmParametersFile: 'arm_templates/network_param.json'
+    csmFile: '$(Build.ArtifactStagingDirectory)/network_template.json'
+    csmParametersFile: '$(Build.ArtifactStagingDirectory)//network_param.json'
     deploymentMode: 'Incremental'
     deploymentName: 'deploy1'
 
