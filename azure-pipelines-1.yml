@@ -1,0 +1,45 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+variables:
+  - group: MyVarGroup
+  - name: subscriptionid
+    value: 'a67243e0-71c8-497b-ba52-805ef0624a0d'
+  - name: rgname
+    value: rg-for-tests
+  - name: location
+    value: westeurope
+  - name: clustername
+    value: myaks1
+  - name: nodecount
+    value: 2
+  - name: vnetname
+    value: myvnet1
+  - name: subnetname
+    value: mysubnet1
+  - name: spnname
+    value: myaks1-sp
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: $(azureSubscriptionConnection)
+    subscriptionId: ${{ subscriptionid }}
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: ${{ rgname }}
+    location: ${{ location }}
+    templateLocation: 'Linked Artifact'
+    csmFile: 'arm_templates/network_template.json'
+    csmParametersFile: 'arm_templates/network_param.json'
+    deploymentMode: 'Incremental'
+    deploymentName: 'deploy1'
+
