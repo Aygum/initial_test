@@ -16,6 +16,8 @@ variables:
     value: westeurope
   - name: clustername
     value: myaks1
+  - name: dnsPrefix
+    value: myaks-a67243e0
   - name: nodecount
     value: 2
   - name: vnetname
@@ -24,6 +26,10 @@ variables:
     value: mysubnet1
   - name: spnname
     value: myaks1-sp
+  - name: ServicePrincipalObjectId
+    value: '36802e8a-7b49-4077-9d87-24b80d801702'
+  - name: ServicePrincipalClientId
+    value: '664b9952-8a9e-44bc-a5f4-3f772d0b7f79'
 
 pool:
   vmImage: ubuntu-latest
@@ -37,6 +43,7 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: AzureResourceManagerTemplateDeployment@3
+  displayName: network_creation
   inputs:
     deploymentScope: 'Resource Group'
     azureResourceManagerConnection: $(azureSubscriptionConnection)
@@ -45,8 +52,30 @@ steps:
     resourceGroupName: $(rgname)
     location: $(location)
     templateLocation: 'Linked artifact'
-    csmFile: '$(Build.ArtifactStagingDirectory)/network_template.json'
-    csmParametersFile: '$(Build.ArtifactStagingDirectory)/network_param.json'
+    csmFile: '$(Build.ArtifactStagingDirectory)/network.json'
+    csmParametersFile: '$(Build.ArtifactStagingDirectory)/network.param.json'
+    deploymentMode: 'Incremental'
+    deploymentName: 'deploy1'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: aks_creation
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: $(azureSubscriptionConnection)
+    subscriptionId: $(subscriptionid)
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: $(rgname)
+    location: $(location)
+    templateLocation: 'Linked artifact'
+    csmFile: '$(Build.ArtifactStagingDirectory)/aks.json'
+    csmParametersFile: '$(Build.ArtifactStagingDirectory)/aks.param.json'
+    overrideParameters: '-resourceName $(clustername) `
+    -dnsPrefix $(dnsPrefix) `
+    -existingServicePrincipalObjectId $(ServicePrincipalObjectId) `
+    -existingServicePrincipalClientId $(ServicePrincipalClientId) `
+    -existingVirtualNetworkName $(vnetname) `
+    -existingVirtualNetworkResourceGroup $(rgname) `
+    -existingSubnetName $(subnetname)'
     deploymentMode: 'Incremental'
     deploymentName: 'deploy1'
 
