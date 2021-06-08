@@ -87,7 +87,6 @@ steps:
           --generate-ssh-keys `
           --node-count $(nodecount) `
           --node-vm-size Standard_D2s_v3 `
-          --enable-vmss `
           --enable-cluster-autoscaler `
           --min-count 3 `
           --max-count 6 `
