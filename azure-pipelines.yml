@@ -80,12 +80,7 @@ steps:
           --name $(subnetname) `
           --query id `
           --output tsv)
-        $SP_PASSWD=$(az ad sp create-for-rbac `
-          --name $(spnname) `
-          --role Contributor `
-          --scope $VNET_ID `
-          --query password `
-          --output tsv)
+        $SP_PASSWD='ZH_ejSQA-rC0SoTpYh8muQoZDMP4T-tjAy'
         $SP_ID=$(az ad sp show `
           --id http://$(spnname) `
           --query appId `
