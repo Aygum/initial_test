@@ -33,10 +33,10 @@ steps:
   inputs:
     deploymentScope: 'Resource Group'
     azureResourceManagerConnection: $(azureSubscriptionConnection)
-    subscriptionId: ${{ subscriptionid }}
+    subscriptionId: $(subscriptionid)
     action: 'Create Or Update Resource Group'
-    resourceGroupName: ${{ rgname }}
-    location: ${{ location }}
+    resourceGroupName: $(rgname)
+    location: $(location)
     templateLocation: 'Linked Artifact'
     csmFile: 'arm_templates/network_template.json'
     csmParametersFile: 'arm_templates/network_param.json'
