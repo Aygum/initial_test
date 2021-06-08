@@ -69,13 +69,7 @@ steps:
     templateLocation: 'Linked artifact'
     csmFile: '$(Build.ArtifactStagingDirectory)/aks.json'
     csmParametersFile: '$(Build.ArtifactStagingDirectory)/aks.param.json'
-    overrideParameters: '-resourceName $(clustername) `
-    -dnsPrefix $(dnsPrefix) `
-    -existingServicePrincipalObjectId $(ServicePrincipalObjectId) `
-    -existingServicePrincipalClientId $(ServicePrincipalClientId) `
-    -existingVirtualNetworkName $(vnetname) `
-    -existingVirtualNetworkResourceGroup $(rgname) `
-    -existingSubnetName $(subnetname)'
+    overrideParameters: '-resourceName $(clustername) -dnsPrefix $(dnsPrefix) -existingServicePrincipalObjectId $(ServicePrincipalObjectId) -existingServicePrincipalClientId $(ServicePrincipalClientId) -existingVirtualNetworkName $(vnetname) -existingVirtualNetworkResourceGroup $(rgname) -existingSubnetName $(subnetname)'
     deploymentMode: 'Incremental'
     deploymentName: 'deploy1'
 
