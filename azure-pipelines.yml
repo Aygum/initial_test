@@ -88,7 +88,7 @@ steps:
           --node-count $(nodecount) `
           --node-vm-size Standard_D2s_v3 `
           --enable-cluster-autoscaler `
-          --min-count 3 `
+          --min-count 2 `
           --max-count 6 `
           --kubernetes-version 1.20.5`
           --service-principal $SP_ID `
